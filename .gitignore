@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.duckdb
+*.wal
+data/raw/
+outputs/
+kaggle.json
+.env
+**/data/raw/
+**/outputs/

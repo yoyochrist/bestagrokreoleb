@@ -1,0 +1,40 @@
+{
+  "A_rules": {
+    "average_precision": 0.38507971565062143,
+    "precision_at_50": 0.66,
+    "recall_at_50": 0.08418367346938775,
+    "test_accounts": 2000,
+    "test_prevalence": 0.196
+  },
+  "B_supervised": {
+    "average_precision": 0.7296954409752022,
+    "precision_at_50": 0.88,
+    "recall_at_50": 0.11224489795918367,
+    "test_accounts": 2000,
+    "test_prevalence": 0.196,
+    "brier_score": 0.0807519826323629
+  },
+  "E_deck_fixed_weights": {
+    "average_precision": 0.7551955394015037,
+    "precision_at_50": 0.96,
+    "recall_at_50": 0.12244897959183673,
+    "test_accounts": 2000,
+    "test_prevalence": 0.196
+  },
+  "C_hybrid_without_graph": {
+    "average_precision": 0.7362343972828931,
+    "precision_at_50": 0.86,
+    "recall_at_50": 0.1096938775510204,
+    "test_accounts": 2000,
+    "test_prevalence": 0.196,
+    "brier_score": 0.08330654949088848
+  },
+  "D_hybrid_with_graph": {
+    "average_precision": 0.8826004250276811,
+    "precision_at_50": 1.0,
+    "recall_at_50": 0.12755102040816327,
+    "test_accounts": 2000,
+    "test_prevalence": 0.196,
+    "brier_score": 0.05718370869372864
+  }
+}
