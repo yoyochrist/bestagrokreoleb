@@ -9,6 +9,10 @@ The complete session is now in this notebook: explanations, runnable code, graph
 
 IEEE-CIS is the main dataset throughout the modelling flow. One small synthetic transfer example explains fan-in/out, ordered cycles and bounded traversal because IEEE-CIS does not provide account-to-account transfers. It is a section within the same notebook, not a second lab or a dataset merged into training.
 
+## Data download
+
+[Follow the IEEE-CIS data setup guide](DATA_SETUP.md). IEEE-CIS is a Kaggle Competition; sign in and accept its rules to download the two training CSVs. An optional authenticated download/extraction helper is included.
+
 ## Start
 
 ```bash
