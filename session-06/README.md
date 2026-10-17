@@ -1,47 +1,35 @@
 # Session 6 — Graph Analysis for Fintech Fraud Detection
 **BestAgro Lab · Kreo Digital**
 
-Extend supervised and unsupervised detection with graph context while retaining one hybrid scoring layer. Uses DuckDB; no Neo4j.
+## One notebook, one lab
 
-## Main track: IEEE-CIS
+Open [Session_06_Graph_Fraud_Hybrid_Scoring.ipynb](Session_06_Graph_Fraud_Hybrid_Scoring.ipynb).
 
-Start with [the IEEE-CIS workbook](ieee_cis/README.md). The target is transaction-level `isFraud`. The graph connects transactions to shared anonymized attributes; it does not assert unique customers, hardware fingerprints or money-transfer flows.
+The complete session is now in this notebook: explanations, runnable code, graph visualization, exercises, 25 embedded questions and response cells, supervised and unsupervised models, fixed-weight and learned hybrid risk scoring, evaluation charts and analyst review.
+
+IEEE-CIS is the main dataset throughout the modelling flow. One small synthetic transfer example explains fan-in/out, ordered cycles and bounded traversal because IEEE-CIS does not provide account-to-account transfers. It is a section within the same notebook, not a second lab or a dataset merged into training.
+
+## Start
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r session-06/requirements.txt
-python session-06/ieee_cis/run_ieee.py --data-dir data/raw/ieee_cis --output-dir outputs/ieee_cis --limit 60000
+jupyter lab session-06/Session_06_Graph_Fraud_Hybrid_Scoring.ipynb
 ```
 
-Download the two training CSVs after accepting the Kaggle competition rules; see the workbook. Data, credentials and row-level IEEE-CIS outputs are not committed.
+VS Code's Jupyter extension can also open the notebook. Select the environment with the installed dependencies. On Windows activate `.venv\Scripts\Activate.ps1` instead.
 
-## Introductory track: synthetic transfer graphs
+Accept the Kaggle competition rules and download/extract `train_transaction.csv` and `train_identity.csv`. Set the notebook's `DATA_DIR` to their directory. Default paths are relative to the notebook kernel's working directory; the notebook prints the resolved path. Run all cells sequentially. The first run uses the earliest 60,000 labelled transactions; set `LIMIT=0` for all rows after checking available memory.
 
-Use [the synthetic workbook](synthetic/README.md) for fan-in/out, ordered payment cycles, device sharing and multi-hop traversal. These scenarios are separate from IEEE-CIS because it does not supply the necessary transfer endpoints or unique device IDs.
+The optional DuckPGQ section is disabled by default. Required graph analysis uses DuckDB SQL and does not need a graph extension. No Neo4j.
 
-```bash
-python session-06/synthetic/run_lab.py
-```
+## Supporting files
 
-The runner regenerates its CSV data and DuckDB database locally. Its stored results are explicitly synthetic, not IEEE-CIS results.
+The `ieee_cis/` and `synthetic/` folders preserve earlier CLI reference solutions. They are supporting material; learners do not need to run them separately. Their previous narrative guides are replaced by pointers to the unified notebook. Earlier stored synthetic results must not be interpreted as IEEE-CIS metrics.
 
-## Session outcomes
+## Validation
 
-1. Construct graph representations and inspect ambiguous shared attributes.
-2. Compute strictly historical graph features.
-3. Compare supervised, unsupervised and graph-enriched detection.
-4. Combine signals using hybrid scoring.
-5. Evaluate on later observations at the same review budget.
-6. Explain limitations, temporal leakage and false positives.
+Notebook schema validated; every required code cell executed sequentially on a 1,000-row independent schema-compatible fixture, including plots, all five scoring variants and review policy. Jupyter kernel launch itself was blocked by this authoring environment's socket restrictions, so a live-kernel end-to-end run is not claimed. Actual Kaggle training and optional DuckPGQ execution remain unverified. See [VALIDATION.md](VALIDATION.md).
 
-## Verification
-
-- Synthetic DuckDB SQL/ML pipeline executed successfully, including all seven answer queries.
-- IEEE-CIS runner passed a 1,000-row independent synthetic fixture; actual Kaggle training has not been run.
-- DuckPGQ extension installation was blocked by connectivity. Native graph SQL is provided as an optional, unverified exercise.
-- See each track's `VALIDATION.md` for details.
-
-## Package history
-
-This initial Session 6 import includes both deliverables prepared on 17 October 2026: the original graph-analysis workshop and the later IEEE-CIS modelling update. The repository was empty before this import; there was no previous remote commit to preserve beyond initialization.
+Keep Kaggle inputs, credentials and row-level outputs out of this public repository. Clear notebook outputs before committing a data-backed run.

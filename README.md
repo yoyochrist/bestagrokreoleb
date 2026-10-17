@@ -2,8 +2,10 @@
 
 Learning labs from **Kreo Digital**.
 
-## Sessions
+## Session 6
 
-- [Session 6 — Graph Analysis for Fintech Fraud Detection](session-06/README.md): IEEE-CIS modelling with DuckDB, supervised and unsupervised learning, and hybrid scoring. Includes a separate synthetic graph-pattern workshop.
+[Open the complete Jupyter notebook: Graph Analysis for Fintech Fraud Detection](session-06/Session_06_Graph_Fraud_Hybrid_Scoring.ipynb).
 
-Raw Kaggle data and credentials are not included. See Session 6 for download instructions, assumptions and verification status.
+One integrated lab with IEEE-CIS data, graph exploration, 25 questions, supervised/unsupervised learning, hybrid risk scoring and analyst review. [Setup and validation](session-06/README.md).
+
+Raw Kaggle data and credentials are not included.
