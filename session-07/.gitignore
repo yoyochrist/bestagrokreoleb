@@ -1,0 +1,6 @@
+data/
+outputs/
+.venv/
+.ipynb_checkpoints/
+__pycache__/
+kaggle.json
