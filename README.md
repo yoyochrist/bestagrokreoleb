@@ -13,3 +13,7 @@ Raw Kaggle data and credentials are not included.
 ## Session 7
 
 [Unsupervised Learning & SHAP Values](session-07/Kreo_Digital_Session_07_Unsupervised_SHAP.ipynb) — one integrated PaySim mobile-money fraud lab, with clustering, anomaly scoring, SHAP, held-out evaluation and student exercises. [Setup and validation status](session-07/README.md).
+
+## Session 8
+
+[Q-Learning for Fraud Review](session-08/Kreo_Digital_Session_08_Q_Learning_Fraud_Review.ipynb) — learn REVIEW/PASS decisions with limited analyst capacity, tabular Q-learning, simulated utility, chronological evaluation and policy comparisons. [Setup and validation](session-08/README.md).
