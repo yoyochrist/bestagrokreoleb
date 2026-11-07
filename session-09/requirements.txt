@@ -1,0 +1,8 @@
+mlflow>=3.4,<4
+scikit-learn>=1.5,<2
+numpy>=1.26,<3
+pandas>=2.2,<3
+jupyterlab>=4.2,<5
+ipykernel>=6.29,<8
+psycopg2-binary>=2.9,<3
+boto3>=1.35,<2
