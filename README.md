@@ -17,3 +17,7 @@ Raw Kaggle data and credentials are not included.
 ## Session 8
 
 [Q-Learning for Fraud Review](session-08/Kreo_Digital_Session_08_Q_Learning_Fraud_Review.ipynb) — learn REVIEW/PASS decisions with limited analyst capacity, tabular Q-learning, simulated utility, chronological evaluation and policy comparisons. [Setup and validation](session-08/README.md).
+
+## Session 9
+
+[MLflow Best Practices & Scaling](session-09/Kreo_Digital_Session_09_MLflow_Best_Practices.ipynb) — integrated synthetic classification lab for experiment tracking, leakage-safe model selection, registry aliases, reproducibility, and production scaling considerations. [Setup and local PostgreSQL/MinIO demo](session-09/README.md).
