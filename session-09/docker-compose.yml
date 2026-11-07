@@ -1,0 +1,60 @@
+# Classroom demo only. Loopback-bound ports, demo credentials, no authentication/TLS.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-mlflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mlflow_demo_only}
+      POSTGRES_DB: ${POSTGRES_DB:-mlflow}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mlflow} -d ${POSTGRES_DB:-mlflow}"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  minio:
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-labadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-labadmin123}
+    ports:
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - miniodata:/data
+  create-bucket:
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z
+    depends_on: [minio]
+    entrypoint: >
+      /bin/sh -c "
+      until mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-labadmin} ${MINIO_ROOT_PASSWORD:-labadmin123}; do sleep 2; done;
+      mc mb --ignore-existing local/mlflow-artifacts;
+      "
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      create-bucket:
+        condition: service_completed_successfully
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-labadmin}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-labadmin123}
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+    command:
+      - sh
+      - -c
+      - >
+        mlflow db upgrade "postgresql+psycopg2://${POSTGRES_USER:-mlflow}:${POSTGRES_PASSWORD:-mlflow_demo_only}@postgres:5432/${POSTGRES_DB:-mlflow}" &&
+        mlflow server --host 0.0.0.0 --port 5000
+        --backend-store-uri "postgresql+psycopg2://${POSTGRES_USER:-mlflow}:${POSTGRES_PASSWORD:-mlflow_demo_only}@postgres:5432/${POSTGRES_DB:-mlflow}"
+        --serve-artifacts --artifacts-destination s3://mlflow-artifacts
+        --allowed-hosts "localhost:5000,127.0.0.1:5000"
+    ports:
+      - "127.0.0.1:5000:5000"
+volumes:
+  pgdata:
+  miniodata:
