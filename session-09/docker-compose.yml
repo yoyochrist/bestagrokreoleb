@@ -52,9 +52,33 @@ services:
         mlflow server --host 0.0.0.0 --port 5000
         --backend-store-uri "postgresql+psycopg2://${POSTGRES_USER:-mlflow}:${POSTGRES_PASSWORD:-mlflow_demo_only}@postgres:5432/${POSTGRES_DB:-mlflow}"
         --serve-artifacts --artifacts-destination s3://mlflow-artifacts
-        --allowed-hosts "localhost:5000,127.0.0.1:5000"
+        --allowed-hosts "localhost:5000,127.0.0.1:5000,mlflow:5000"
     ports:
       - "127.0.0.1:5000:5000"
+  # Serves the registry alias as a REST API. Opt-in profile: start it only after the
+  # notebook has registered the model:  docker compose --profile serving up -d --build
+  model-server:
+    profiles: ["serving"]
+    build:
+      context: .
+      dockerfile: Dockerfile.serve
+    depends_on: [mlflow]
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      MODEL_URI: ${MODEL_URI:-models:/kreo_session09_synthetic_risk@candidate}
+    command:
+      - sh
+      - -c
+      - mlflow models serve -m "$$MODEL_URI" --env-manager local --host 0.0.0.0 --port 8080 --workers 1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/ping', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: on-failure
+    ports:
+      - "127.0.0.1:5001:8080"
 volumes:
   pgdata:
   miniodata:
