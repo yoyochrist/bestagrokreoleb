@@ -7,6 +7,7 @@ One integrated **Kreo Digital** classroom lab using generated, seeded, fraud-lik
 - [Integrated notebook](Kreo_Digital_Session_09_MLflow_Best_Practices.ipynb)
 - [Python dependencies](requirements.txt)
 - [Optional local multi-service Compose stack](docker-compose.yml)
+- [Model-serving image](Dockerfile.serve)
 - [Sample local environment](.env.example)
 
 ## Quick start: notebook only
@@ -34,6 +35,19 @@ export MLFLOW_TRACKING_URI=http://127.0.0.1:5000
 ```
 
 Local services: PostgreSQL metadata, MinIO S3-compatible artifacts, one MLflow tracking server. MinIO console: http://127.0.0.1:9001. Credentials are **demo only**. The Compose stack does not include TLS, identity, multi-AZ resilience or remote access. Do not deploy publicly or use real customer data.
+
+### Deploy the model as a REST endpoint
+
+After the notebook has registered the model and set the `candidate` alias:
+
+```bash
+docker compose --profile serving up -d --build      # builds Dockerfile.serve, serves on 127.0.0.1:5001
+curl http://127.0.0.1:5001/ping
+curl -X POST http://127.0.0.1:5001/invocations -H 'Content-Type: application/json' \
+  -d '{"inputs": [[0.1,-1.2,0.5,2.0,0.3,-0.7,1.1,0.0,-0.4,0.9,1.5,-2.1,0.2,0.6,-0.3,1.0,0.8,-1.0]]}'
+```
+
+The `model-server` loads `models:/kreo_session09_synthetic_risk@candidate` at startup. After moving the alias or re-registering, run `docker compose --profile serving restart model-server`. Override the target with `MODEL_URI=models:/<name>@<alias>`. `Dockerfile.serve` pins library versions to the model's logged `requirements.txt`; update them if you retrain with different versions. Notebook section 7 calls the endpoint and checks it against the registry model.
 
 **Why a single tracking server?** Horizontal replicas require a separate deployment layer (e.g. Kubernetes), shared backend/artifact stores, secure ingress, DB connection tuning, load tests, retention, and observability. This notebook teaches architecture design rather than pretending Docker Compose provides HA.
 
